@@ -1,0 +1,7 @@
+{
+  "llm": { "provider": "openai", "model": "gpt-4o" },
+  "search": { "defaultCity": "全国", "pageSize": 15 },
+  "profile": { "skills": [] },
+  "antiDetect": { "requestDelay": 1.0, "enableBurstPenalty": true, "maxRetries": 3 },
+  "store": { "dbPath": "~/.boss-agent/data.db" }
+}
