@@ -54,11 +54,19 @@ export class SessionMemory {
   /**
    * 转为 LangChain 格式的消息
    */
+  /**
+   * 转为 LangChain 格式的消息
+   * LangChain 需要 "human" / "ai" / "system" / "tool"， role
+   */
   toLangChainMessages(): Array<{ role: string; content: string }> {
-    return this.getRecentMessages().map(m => ({
-      role: m.role,
-      content: m.content,
-    }));
+    return this.getRecentMessages().map(m => {
+      const role = m.role === "user"
+        ? "human"
+        : m.role === "assistant"
+          ? "ai"
+          : m.role;
+      return { role, content: m.content };
+    });
   }
 
   clear(): void {

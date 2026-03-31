@@ -1,6 +1,8 @@
 import type { Job, SalaryAnalysis, SkillAnalysisItem, MatchResult } from "../client/types.js";
 import chalk from "chalk";
 import Table from "cli-table3";
+import { truncate } from "../utils/format";
+
 
 /**
  * 渲染职位列表表格
@@ -66,7 +68,7 @@ export function renderSkillsAnalysis(skills: SkillAnalysisItem[], top = 10): str
 
   const displayed = skills.slice(0, top);
   for (const skill of displayed) {
-    const barLen = Math.round((skill.percentage / 100) * 20);
+    const barLen = Math.min(20, Math.round((skill.percentage / 100) * 20));
     const bar = "▓".repeat(barLen) + "░".repeat(20 - barLen);
     lines.push(`  ${skill.name.padEnd(15)} ${chalk.cyan(bar)} ${skill.count} (${skill.percentage}%)`);
   }
@@ -120,12 +122,8 @@ export function renderMarkdown(text: string): string {
 
 // ── 工具函数 ──
 
-function truncate(str: string, maxLen: number): string {
-  if (str.length <= maxLen) return str;
-  return str.slice(0, maxLen - 1) + "…";
-}
-
 function formatK(value: number): string {
+  if (!Number.isFinite(value)) return "面议";
   if (value >= 1000) return `${Math.round(value / 1000)}K`;
   return `${value}`;
 }

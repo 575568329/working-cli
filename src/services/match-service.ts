@@ -1,5 +1,18 @@
 import type { Job, MatchResult, UserProfile } from "../client/types.js";
 
+/**
+ * 单词边界匹配检查 — 避免子串误匹配（如 "Java" 匹配到 "JavaScript"）
+ * 先尝试精确匹配，再尝试分词边界匹配
+ */
+function isSkillMatch(jobSkill: string, userSkill: string): boolean {
+  // 精确匹配
+  if (jobSkill === userSkill) return true;
+  // 单词边界匹配: userSkill 应作为完整单词出现在 jobSkill 中
+  const escaped = userSkill.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const regex = new RegExp(`(?:^|[-\\s/+|.,])${escaped}(?:$|[-\\s/+|.,])`);
+  return regex.test(jobSkill);
+}
+
 export class MatchService {
   matchBySkills(userSkills: string[], jobs: Job[]): MatchResult[] {
     const normalizedUserSkills = userSkills.map(s => s.toLowerCase().trim());
@@ -7,10 +20,10 @@ export class MatchService {
     return jobs.map(job => {
       const jobSkills = job.skills.map(s => s.toLowerCase().trim());
       const matched = jobSkills.filter(js =>
-        normalizedUserSkills.some(us => js.includes(us) || us.includes(js))
+        normalizedUserSkills.some(us => isSkillMatch(js, us))
       );
       const missing = job.skills.filter(js =>
-        !normalizedUserSkills.some(us => js.toLowerCase().includes(us) || us.toLowerCase().includes(js))
+        !normalizedUserSkills.some(us => isSkillMatch(js.toLowerCase(), us))
       );
 
       const score = jobSkills.length > 0
