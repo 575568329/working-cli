@@ -34,8 +34,12 @@ export function loadConfig(configDir?: string): AppConfig {
   // 3. 环境变量覆盖 API Key
   if (process.env.OPENAI_API_KEY) {
     config.llm.apiKey = process.env.OPENAI_API_KEY;
+  } else if (process.env.ZHIPU_API_KEY) {
+    config.llm.apiKey = process.env.ZHIPU_API_KEY;
   } else if (process.env.ANTHROPIC_API_KEY) {
     config.llm.apiKey = process.env.ANTHROPIC_API_KEY;
+    config.llm.provider = "claude";
+    config.llm.model = "claude-sonnet-4-20250514";
   }
 
   return config;

@@ -16,8 +16,9 @@ export function createChatModel(config: LLMConfig): BaseChatModel {
   switch (config.provider) {
     case "openai":
       return new ChatOpenAI({
-        modelName: config.model,
-        openAIApiKey: config.apiKey,
+        model: config.model,
+        apiKey: config.apiKey,
+        configuration: config.baseUrl ? { baseURL: config.baseUrl } : undefined,
         temperature: 0.7,
       });
 
@@ -30,8 +31,8 @@ export function createChatModel(config: LLMConfig): BaseChatModel {
 
     case "ollama":
       return new ChatOpenAI({
-        modelName: config.model,
-        openAIApiKey: "ollama", // Ollama 不需要 key，但 ChatOpenAI 要求非空
+        model: config.model,
+        apiKey: "ollama", // Ollama 不需要 key，但 ChatOpenAI 要求非空
         configuration: {
           baseURL: config.baseUrl || "http://localhost:11434/v1",
         },
@@ -60,6 +61,14 @@ export function resolveProvider(
       return { provider: "claude", model: "claude-sonnet-4-20250514", apiKey };
     case "ollama":
       return { provider: "ollama", model: "qwen2.5", baseUrl };
+    case "zhipu":
+    case "glm":
+      return {
+        provider: "openai",
+        model: "glm-5",
+        apiKey,
+        baseUrl: baseUrl || "https://open.bigmodel.cn/api/paas/v4",
+      };
     default:
       throw new Error(`未知的 provider: ${provider}`);
   }

@@ -33,7 +33,8 @@ export interface AppConfig {
 export const DEFAULT_CONFIG: AppConfig = {
   llm: {
     provider: "openai",
-    model: "gpt-4o",
+    model: "glm-5",
+    baseUrl: "https://open.bigmodel.cn/api/paas/v4",
   },
   search: {
     defaultCity: "全国",
