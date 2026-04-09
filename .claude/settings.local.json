@@ -1,12 +1,21 @@
 {
   "permissions": {
     "allow": [
-      "WebSearch",
-      "mcp__tavily__tavily_search",
+      "Bash(*)",
+      "Read(*)",
+      "Write(*)",
+      "Edit(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "WebFetch(*)",
+      "WebSearch(*)",
+      "Task(*)",
+      "NotebookEdit(*)",
+      "LSP(*)",
+      "mcp__*",
       "mcp__web-search-prime__web_search_prime",
-      "mcp__zread__get_repo_structure",
-      "mcp__zread__read_file",
-      "mcp__zread__search_doc"
+      "mcp__plugin_context7_context7__resolve-library-id",
+      "mcp__plugin_context7_context7__query-docs"
     ]
   }
 }
